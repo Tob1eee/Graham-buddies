@@ -8,7 +8,7 @@ PRODUCTS = [
     {"id": 1, "name": "Classic Mango Graham Cup", "category": "Cups", "price": 49, "size": "sm", "img": "MangoGrahamCup.jpg", "alt": "Three Mango Graham cups topped with cream, mango pieces and graham crumbs", "focus": "50% 50%", "desc": "A single-serving Mango Graham dessert.", "details": "Creamy layers, mango pieces and graham crumbs in one cup."},
     {"id": 2, "name": "Large Mango Graham Tub", "category": "Tubs", "price": 99, "size": "md", "img": "LargeMangoGraham.jpg", "alt": "Container of Mango Graham topped with sliced mango, with graham crackers and mangoes beside it", "focus": "50% 50%", "desc": "A larger serving for customers who want more.", "details": "A bigger tub of the same creamy mango and graham layers."},
     {"id": 3, "name": "Family-Size Mango Graham", "category": "Tubs", "price": 199, "size": "lg", "img": "FamilySizeMangoGraham.jpg", "alt": "Large tray of Mango Graham covered in graham crumbs and sliced mango", "focus": "50% 50%", "desc": "A larger dessert intended for sharing.", "details": "Made for family gatherings and sharing with friends."},
-    {"id": 4, "name": "Mango Graham Overload", "category": "Specials", "price": 79, "size": "xl", "img": "MangoGrahamOver.jpg", "alt": "Two tubs of Mango Graham topped with diced mango", "focus": "50% 70%", "desc": "Extra mango and graham toppings.", "details": "A special variation with additional mango and graham toppings."},
+    {"id": 4, "name": "Mango Graham Overload", "category": "Specials", "price": 299, "size": "xl", "img": "MangoGrahamOver.jpg", "alt": "Two tubs of Mango Graham topped with diced mango", "focus": "50% 70%", "desc": "Extra mango and graham toppings.", "details": "A special variation with additional mango and graham toppings."},
 ]
 
 cart = {}
