@@ -1,4 +1,4 @@
-/* Graham Buddies — palette from the brand guide */
+
 :root{--cream:#FFF0CC;--mango:#FFBF32;--honey:#E99A12;--brown:#71301D;--caramel:#A75A2A;--vanilla:#FFF8E8;--shadow:0 8px 24px rgba(233,154,18,.28);color-scheme:light}
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:90px}
