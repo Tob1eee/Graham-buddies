@@ -10,7 +10,6 @@ PRODUCTS = [
     {"id": 3, "name": "Family-Size Mango Graham", "category": "Tubs", "price": 199, "size": "lg", "img": "FamilySizeMangoGraham.jpg", "alt": "Large tray of Mango Graham covered in graham crumbs and sliced mango", "focus": "50% 50%", "desc": "A larger dessert intended for sharing.", "details": "Made for family gatherings and sharing with friends."},
     {"id": 4, "name": "Mango Graham Overload", "category": "Specials", "price": 299, "size": "xl", "img": "MangoGrahamOver.jpg", "alt": "Two tubs of Mango Graham topped with diced mango", "focus": "50% 70%", "desc": "Extra mango and graham toppings.", "details": "A special variation with additional mango and graham toppings."},
 ]
-
 cart = {}
 
 def peso(amount):
