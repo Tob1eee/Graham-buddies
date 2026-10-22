@@ -1,21 +1,10 @@
-"""Graham Buddies — PyScript application logic (Event-Driven Programming).
-
-Pattern used everywhere:
-    USER EVENT  ->  Python event handler  ->  update data  ->  re-render the page
-
-Handlers are connected with PyScript's @when(event, selector) decorator.
-Buttons that are created dynamically (product cards, cart rows) are handled by
-EVENT DELEGATION: one handler on the parent container checks which child was used.
-"""
 import asyncio
 from pyscript import document, when, window
 
-# ---------------------------------------------------------------- settings
-DELIVERY_FEE = 50          # pesos, charged only for Delivery (edit me)
+DELIVERY_FEE = 50
 MAX_QTY = 99
-VIDEO_URL = ""             # e.g. "promo.mp4" once you have a real ad
+VIDEO_URL = ""
 
-# ---------------------------------------------------------------- data (edit prices here)
 PRODUCTS = [
     {"id": 1, "name": "Classic Mango Graham Cup", "category": "Cups", "price": 49, "size": "sm", "img": "MangoGrahamCup.jpg", "alt": "Three Mango Graham cups topped with cream, mango pieces and graham crumbs", "focus": "50% 50%",
      "desc": "A single-serving Mango Graham dessert.",
@@ -31,12 +20,10 @@ PRODUCTS = [
      "details": "A special variation with additional mango and graham toppings."},
 ]
 
-cart = {}  # application state: {product_id: quantity}
+cart = {}
 
 
-# ---------------------------------------------------------------- helper (pure) functions
 def peso(amount):
-    """Format a number as Philippine pesos, e.g. 1234 -> ₱1,234."""
     return f"₱{amount:,}"
 
 
@@ -48,7 +35,6 @@ def find_product(product_id):
 
 
 def parse_quantity(text):
-    """Return a valid whole-number quantity (1..MAX_QTY) or None if invalid."""
     try:
         quantity = int(str(text).strip())
     except ValueError:
@@ -70,7 +56,6 @@ def delivery_fee():
 
 
 def validate_contact(name, contact):
-    """Return a list of friendly error messages (empty list = valid)."""
     errors = []
     if len(name.strip()) < 2:
         errors.append("Please enter your name.")
@@ -83,7 +68,6 @@ def validate_contact(name, contact):
     return errors
 
 
-# ---------------------------------------------------------------- UI helpers
 def show_message(element_id, text, ok):
     box = document.querySelector(element_id)
     box.textContent = text
@@ -97,16 +81,13 @@ async def _hide_toast():
 
 
 def toast(text):
-    """Brief feedback message (e.g. 'Added to cart')."""
     box = document.querySelector("#toast")
     box.textContent = text
     box.classList.add("show")
     asyncio.ensure_future(_hide_toast())
 
 
-# ---------------------------------------------------------------- rendering (dynamic page updates)
 def render_products(category="all"):
-    """Rebuild the product grid, showing only products in `category`."""
     html = ""
     for p in PRODUCTS:
         if category != "all" and p["category"] != category:
@@ -130,7 +111,6 @@ def render_products(category="all"):
 
 
 def render_cart():
-    """Rebuild the cart panel and every number that depends on the cart."""
     lines = ""
     for pid, qty in cart.items():
         p = find_product(pid)
@@ -169,8 +149,6 @@ def set_cart_open(is_open):
         document.querySelector("#close-cart").focus()
 
 
-# ---------------------------------------------------------------- EVENT HANDLERS
-# D. Product filtering — click on a filter chip
 @when("click", "#filters")
 def on_filter_click(event):
     chip = event.target.closest("[data-filter]")
@@ -182,7 +160,6 @@ def on_filter_click(event):
     render_products(chip.getAttribute("data-filter"))
 
 
-# B. User input — live price preview while typing a quantity on a product card
 @when("input", "#product-grid")
 def on_product_quantity_input(event):
     field = event.target
@@ -199,7 +176,6 @@ def on_product_quantity_input(event):
         live.className = "live"
 
 
-# A. Add to Cart — click on a product's button
 @when("click", "#product-grid")
 def on_add_to_cart(event):
     button = event.target.closest("[data-add]")
@@ -215,7 +191,6 @@ def on_add_to_cart(event):
     toast(f"Added {quantity} × {find_product(pid)['name']} to your cart")
 
 
-# B / E. Cart quantity buttons and Remove — one delegated click handler
 @when("click", "#cart-lines")
 def on_cart_click(event):
     target = event.target
@@ -231,12 +206,11 @@ def on_cart_click(event):
             if cart[pid] < 1:
                 del cart[pid]
         else:
-            del cart[pid]            # E. Cart removal
+            del cart[pid]
         render_cart()
         return
 
 
-# B. Typing a quantity directly in the cart — validate, then recalculate
 @when("change", "#cart-lines")
 def on_cart_quantity_change(event):
     pid_text = event.target.getAttribute("data-set")
@@ -247,10 +221,9 @@ def on_cart_quantity_change(event):
         toast(f"Quantity must be a whole number from 1 to {MAX_QTY}.")
     else:
         cart[int(pid_text)] = quantity
-    render_cart()                    # re-render restores a valid number
+    render_cart()
 
 
-# Delivery vs Pickup — change event updates address field and fee
 @when("change", "#order-mode")
 def on_mode_change(event):
     pickup = event.target.value == "Pickup"
@@ -258,10 +231,9 @@ def on_mode_change(event):
     render_cart()
 
 
-# C. Form submission — demo order
 @when("submit", "#order-form")
 def on_order_submit(event):
-    event.preventDefault()           # stop the browser reloading the page
+    event.preventDefault()
     name = document.querySelector("#o-name").value
     contact = document.querySelector("#o-contact").value
     mode = document.querySelector("#order-mode").value
@@ -282,7 +254,6 @@ def on_order_submit(event):
     render_cart()
 
 
-# C. Form submission — contact inquiry
 @when("submit", "#contact-form")
 def on_contact_submit(event):
     event.preventDefault()
@@ -300,7 +271,6 @@ def on_contact_submit(event):
     document.querySelector("#c-count").textContent = "0 / 300 characters"
 
 
-# B. User input — live character counter
 @when("input", "#c-message")
 def on_message_input(event):
     text = event.target.value
@@ -310,7 +280,6 @@ def on_message_input(event):
     document.querySelector("#c-count").textContent = f"{len(text)} / 300 characters"
 
 
-# Cart open / close / checkout
 @when("click", "#open-cart")
 def on_open_cart(event):
     set_cart_open(True)
@@ -339,7 +308,6 @@ def on_go_checkout(event):
     render_cart()
 
 
-# Navigation: mobile menu toggle and active link
 @when("click", "#burger")
 def on_burger_click(event):
     is_open = document.querySelector("#nav-links").classList.toggle("open")
@@ -358,7 +326,6 @@ def on_nav_click(event):
     document.querySelector("#burger").setAttribute("aria-expanded", "false")
 
 
-# Promo video: preview a local file (placeholder until promo.mp4 is set)
 def show_video(url):
     video = document.querySelector("#promo")
     video.src = url
@@ -380,7 +347,6 @@ def on_video_pick_key(event):
         document.querySelector("#video-file").click()
 
 
-# ---------------------------------------------------------------- start-up
 render_products("all")
 render_cart()
 if VIDEO_URL:
